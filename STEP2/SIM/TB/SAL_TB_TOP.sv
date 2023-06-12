@@ -215,17 +215,21 @@ module SAL_TB_TOP;
     initial begin
         init();
 
-        write32B('d0,   {8{32'h01234567}});
-        write32B('d32,  {8{32'h01234567}});
-        read32B('d0, data);
-        read32B('d32, data);
+        write32B('d0,   {8{32'h01234567}});    // bank 0, row 0, col 0~3
+        write32B('d8200,   {8{32'h01234567}}); // bank 1, row 0, col 0~3
+        write32B('d16400,  {8{32'h99999999}}); // bank 2, row 0, col 0~3
+        write32B('d24600,  {8{32'h88888888}}); // bank 3, row 0, col 0~3
+        write32B('d32800,  {8{32'h77777777}}); // bank 0, row 1, col 4~7
+        write32B('d41000,  {8{32'h11111111}}); // bank 1, row 1, col 4~7
+        read32B('d0, data);                    // bank 0, row 0, col 0~3
+        read32B('d8200, data);                 // bank 1, row 0, col 0~3
 
         repeat (100) @(posedge clk);
 
-        write32B('d0,   {8{32'h01234567}});
-        write32B('d32,  {8{32'h01234567}});
-        read32B('d0, data);
-        read32B('d32, data);
+        write32B('d19000,   {8{32'h01234567}}); // bank 2, row 0, col 144~147
+        write32B('d32,  {8{32'h01234567}});     // bank 0, row 0, col 4~7
+        read32B('d0, data);                     // bank 0, row 0, col 0~3
+        read32B('d32, data);                    // bank 0, row 0, col 4~7
 
         $finish;
     end
